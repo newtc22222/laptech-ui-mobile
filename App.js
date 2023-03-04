@@ -1,11 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useState } from "react";
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, TouchableOpacity, Text, View } from "react-native";
 
 export default function App() {
+  const [count, setCount] = useState(0);
+
+  const handlePress = () => {
+    setCount((prev) => prev + 1);
+  };
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <TouchableOpacity style={styles.button} onPress={handlePress}>
+        <Text>Click me</Text>
+      </TouchableOpacity>
+      <View>
+        <Text>You clicked {count} times</Text>
+      </View>
     </View>
   );
 }
@@ -13,8 +24,14 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  button: {
+    alignItems: "center",
+    backgroundColor: "#DDDDDD",
+    padding: 10,
+    marginBottom: 10,
   },
 });
