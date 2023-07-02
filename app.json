@@ -26,7 +26,7 @@
       "package": "com.phivo.laptechuimobile"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./app/assets/icons/favicon.jpg"
     },
     "extra": {
       "eas": {

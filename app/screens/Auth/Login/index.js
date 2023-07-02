@@ -1,6 +1,10 @@
-import React from "react";
-import { View, TextInput, Button, Text, StyleSheet } from "react-native";
+import React, { useCallback, useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { Button, TextInput, Snackbar } from "react-native-paper";
 import { useForm, Controller } from "react-hook-form";
+
+import { useAppContext } from "../../../components/context/AppContext";
+import { AuthService } from "../../../services";
 
 const LoginScreen = ({ navigation }) => {
   const {
@@ -8,108 +12,132 @@ const LoginScreen = ({ navigation }) => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const { handleLogin } = useAppContext();
+  const [notifyConfig, setNotifyConfig] = useState({
+    show: false,
+    message: "",
+    duration: 3000,
+  });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const handleShowNotify = useCallback((message, duration = 3000) => {
+    setNotifyConfig({
+      show: true,
+      message,
+      duration,
+    });
+  }, []);
+
+  const onSubmit = async (data) => {
+    try {
+      const res = await AuthService.login(data.phone, data.password);
+      const { user, accessToken, refreshToken, maxAgeToken } = res.data;
+      handleLogin(user, accessToken, refreshToken, maxAgeToken);
+    } catch (error) {
+      handleShowNotify("Thông tin tài khoản chưa chính xác!");
+    }
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", paddingHorizontal: 20 }}>
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={{
-              height: 40,
-              borderColor: "gray",
-              borderWidth: 1,
-              marginBottom: 10,
-              padding: 5,
-            }}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            placeholder="Số điện thoại"
-          />
+    <View style={styles.container}>
+      <View style={styles.formControl}>
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              mode="outlined"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              keyboardType="numeric"
+              value={value}
+              label="Số điện thoại"
+            />
+          )}
+          name="phone"
+          rules={{ required: "Vui lòng cung cấp số điện thoại!" }}
+        />
+        {errors.phone && (
+          <Text style={{ color: "red" }}>{errors.phone.message}</Text>
         )}
-        name="phone"
-        rules={{ required: "Vui lòng cung cấp số điện thoại!" }}
-      />
-      {errors.email && (
-        <Text style={{ color: "red" }}>{errors.email.message}</Text>
-      )}
+      </View>
 
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={{
-              height: 40,
-              borderColor: "gray",
-              borderWidth: 1,
-              marginBottom: 10,
-              padding: 5,
-            }}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            placeholder="Mật khẩu"
-            secureTextEntry
-          />
+      <View style={styles.formControl}>
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              mode="outlined"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              label="Mật khẩu"
+              secureTextEntry
+            />
+          )}
+          name="password"
+          rules={{ required: "Vui lòng cung cấp mật khẩu!" }}
+        />
+        {errors.password && (
+          <Text style={{ color: "red" }}>{errors.password.message}</Text>
         )}
-        name="password"
-        rules={{ required: "Vui lòng cung cấp mật khẩu!" }}
-      />
-      {errors.password && (
-        <Text style={{ color: "red" }}>{errors.password.message}</Text>
-      )}
+      </View>
 
       <Button
-        style={styles.btnLogin}
-        title="Đăng nhập"
+        mode="contained"
+        buttonColor="#307c4a"
+        textColor="#fff"
+        style={{ borderRadius: 6 }}
         onPress={handleSubmit(onSubmit)}
-      />
-
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "center",
-          marginTop: 20,
-        }}
       >
-        <Text style={{ marginRight: 10 }}>Chưa có tài khoản?</Text>
+        ĐĂNG NHẬP
+      </Button>
+
+      <View style={styles.moreOptions}>
+        <Text style={{ marginRight: 7 }}>Chưa có tài khoản?</Text>
         <Text
-          style={{ color: "blue" }}
+          style={styles.textLink}
           onPress={() => navigation.navigate("Register")}
         >
           Đăng ký
         </Text>
       </View>
 
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "center",
-          marginTop: 10,
-        }}
-      >
+      <View style={styles.moreOptions}>
         <Text
-          style={{ color: "blue" }}
+          style={styles.textLink}
           onPress={() => navigation.navigate("ForgotPassword")}
         >
           Quên mật khẩu?
         </Text>
       </View>
+
+      <Snackbar
+        visible={notifyConfig.show}
+        onDismiss={() => setNotifyConfig((prev) => ({ ...prev, show: false }))}
+        duration={notifyConfig.duration}
+      >
+        {notifyConfig.message}
+      </Snackbar>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {},
-  btnLogin: {
-    backgroundColor: "#008e66",
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    paddingHorizontal: 20,
   },
-  textBtnLogin: {},
+  formControl: {
+    marginBottom: 10,
+  },
+  moreOptions: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  textLink: {
+    color: "blue",
+  },
 });
 
 export default LoginScreen;
