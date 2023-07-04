@@ -1,10 +1,18 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 
 const CheckoutScreen = ({ navigation }) => {
+  const handleCheckout = () => {};
+
   return (
     <View>
-      <Text>CheckoutScreen</Text>
+      <ScrollView>
+        {/* Products desc */}
+        {/* Information */}
+        <Text>CheckoutScreen</Text>
+        {/* Payment info */}
+        {/* Btn back | confirm */}
+      </ScrollView>
     </View>
   );
 };

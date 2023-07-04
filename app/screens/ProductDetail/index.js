@@ -1,10 +1,29 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 
 const ProductDetailScreen = ({ navigation, route }) => {
+  const [recommendProducts, setRecommendProduct] = useState([]);
+
+  const handleSaveProductPress = () => {};
+
+  const handleProductPress = () => {};
+
+  const handleChangeQuantity = (newQuantity) => {};
+  const handleAddToCartPress = () => {};
+
   return (
     <View>
-      <Text>ProductDetailScreen</Text>
+      <ScrollView>
+        {/* Images Slide */}
+        {/* Basic Information */}
+        {/* Specifications */}
+        {/* Decription detail modal | popup */}
+        {/* Feedback */}
+        {/* Comment */}
+        {/* Btn add to cart | save | compare */}
+        <Text>ProductDetailScreen</Text>
+        {/* Recommend another product (same) */}
+      </ScrollView>
     </View>
   );
 };

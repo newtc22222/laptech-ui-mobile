@@ -1,11 +1,12 @@
 import React from "react";
 import { View, Text } from "react-native";
+import ViewContainer from "../../components/common/ViewContainer";
 
 const InvoiceHistoryScreen = ({ navigation }) => {
   return (
-    <View>
-      <Text>InvoiceHistoryScreen</Text>
-    </View>
+    <ViewContainer>
+      <Text></Text>
+    </ViewContainer>
   );
 };
 

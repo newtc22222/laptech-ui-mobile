@@ -7,6 +7,7 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, justifyContent: "center", paddingHorizontal: 20 }}>
+      {/* Order history, Account, change pass, address */}
       <Button title="Đăng xuất" onPress={() => handleLogout()} />
     </View>
   );

@@ -1,18 +1,20 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Button, TextInput, Snackbar } from "react-native-paper";
 import { useForm, Controller } from "react-hook-form";
 
 import { useAppContext } from "../../../components/context/AppContext";
 import { AuthService } from "../../../services";
+import LaptechLogo from "../../../components/common/LaptechLogo";
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({ navigation, route }) => {
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const { handleLogin } = useAppContext();
+  const [showPassword, setShowPassword] = useState(false);
   const [notifyConfig, setNotifyConfig] = useState({
     show: false,
     message: "",
@@ -27,6 +29,15 @@ const LoginScreen = ({ navigation }) => {
     });
   }, []);
 
+  useEffect(() => {
+    if (route.params) {
+      const { message } = route.params;
+      if (!!message) {
+        handleShowNotify(message);
+      }
+    }
+  }, [route]);
+
   const onSubmit = async (data) => {
     try {
       const res = await AuthService.login(data.phone, data.password);
@@ -38,78 +49,86 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.formControl}>
-        <Controller
-          control={control}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              mode="outlined"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              keyboardType="numeric"
-              value={value}
-              label="Số điện thoại"
-            />
+    <>
+      <View style={styles.container}>
+        <LaptechLogo />
+        <View style={styles.formControl}>
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                mode="outlined"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                keyboardType="numeric"
+                value={value}
+                label="Số điện thoại"
+              />
+            )}
+            name="phone"
+            rules={{ required: "Vui lòng cung cấp số điện thoại!" }}
+          />
+          {errors.phone && (
+            <Text style={{ color: "red" }}>{errors.phone.message}</Text>
           )}
-          name="phone"
-          rules={{ required: "Vui lòng cung cấp số điện thoại!" }}
-        />
-        {errors.phone && (
-          <Text style={{ color: "red" }}>{errors.phone.message}</Text>
-        )}
-      </View>
+        </View>
 
-      <View style={styles.formControl}>
-        <Controller
-          control={control}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              mode="outlined"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              label="Mật khẩu"
-              secureTextEntry
-            />
+        <View style={styles.formControl}>
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                mode="outlined"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                label="Mật khẩu"
+                secureTextEntry={!showPassword}
+                right={
+                  <TextInput.Icon
+                    onPress={() => setShowPassword(!showPassword)}
+                    icon={showPassword ? "eye" : "eye-off"}
+                  />
+                }
+              />
+            )}
+            name="password"
+            rules={{ required: "Vui lòng cung cấp mật khẩu!" }}
+          />
+          {errors.password && (
+            <Text style={{ color: "red" }}>{errors.password.message}</Text>
           )}
-          name="password"
-          rules={{ required: "Vui lòng cung cấp mật khẩu!" }}
-        />
-        {errors.password && (
-          <Text style={{ color: "red" }}>{errors.password.message}</Text>
-        )}
-      </View>
+        </View>
 
-      <Button
-        mode="contained"
-        buttonColor="#307c4a"
-        textColor="#fff"
-        style={{ borderRadius: 6 }}
-        onPress={handleSubmit(onSubmit)}
-      >
-        ĐĂNG NHẬP
-      </Button>
-
-      <View style={styles.moreOptions}>
-        <Text style={{ marginRight: 7 }}>Chưa có tài khoản?</Text>
-        <Text
-          style={styles.textLink}
-          onPress={() => navigation.navigate("Register")}
+        <Button
+          mode="contained"
+          buttonColor="#307c4a"
+          textColor="#fff"
+          style={{ borderRadius: 6 }}
+          onPress={handleSubmit(onSubmit)}
         >
-          Đăng ký
-        </Text>
-      </View>
+          ĐĂNG NHẬP
+        </Button>
 
-      <View style={styles.moreOptions}>
-        <Text
-          style={styles.textLink}
-          onPress={() => navigation.navigate("ForgotPassword")}
-        >
-          Quên mật khẩu?
-        </Text>
-      </View>
+        <View style={styles.moreOptions}>
+          <Text style={{ marginRight: 7 }}>Chưa có tài khoản?</Text>
+          <Text
+            style={styles.textLink}
+            onPress={() => navigation.navigate("Register")}
+          >
+            Đăng ký
+          </Text>
+        </View>
 
+        <View style={styles.moreOptions}>
+          <Text
+            style={styles.textLink}
+            onPress={() => navigation.navigate("ForgotPassword")}
+          >
+            Quên mật khẩu?
+          </Text>
+        </View>
+      </View>
       <Snackbar
         visible={notifyConfig.show}
         onDismiss={() => setNotifyConfig((prev) => ({ ...prev, show: false }))}
@@ -117,7 +136,7 @@ const LoginScreen = ({ navigation }) => {
       >
         {notifyConfig.message}
       </Snackbar>
-    </View>
+    </>
   );
 };
 
