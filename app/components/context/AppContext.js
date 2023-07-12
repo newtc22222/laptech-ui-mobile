@@ -46,9 +46,19 @@ const AppProvider = ({ children }) => {
     setAccessToken(newAccessToken);
   };
 
+  const handleUpdateUser = (newData) => {
+    setUserData(newData);
+  };
+
   return (
     <AppContext.Provider
-      value={{ profile, handleLogin, handleUpdateAccessToken, handleLogout }}
+      value={{
+        profile,
+        handleLogin,
+        handleUpdateAccessToken,
+        handleLogout,
+        handleUpdateUser,
+      }}
     >
       {children}
     </AppContext.Provider>

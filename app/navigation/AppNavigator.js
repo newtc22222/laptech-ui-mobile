@@ -6,10 +6,13 @@ import {
   ForgotPasswordScreen,
   LoginScreen,
   RegisterScreen,
+  UpdatePasswordScreen,
   CheckoutScreen,
-  InvoiceHistoryScreen,
   ProductDetailScreen,
+  SettingScreen,
   MainScreen,
+  InformationScreen,
+  ChangePaswordScreen,
 } from "../screens";
 import { useAppContext } from "../components/context/AppContext";
 
@@ -29,11 +32,13 @@ const AppNavigator = () => {
         {profile.maxAgeToken > Date.now() ? (
           <>
             <Stack.Screen name="Main" component={MainScreen} />
-            <Stack.Screen name="Checkout" component={CheckoutScreen} />
+            <Stack.Screen name="Information" component={InformationScreen} />
             <Stack.Screen
-              name="InvoiceHistory"
-              component={InvoiceHistoryScreen}
+              name="ChangePassword"
+              component={ChangePaswordScreen}
             />
+            <Stack.Screen name="Checkout" component={CheckoutScreen} />
+            <Stack.Screen name="Setting" component={SettingScreen} />
             <Stack.Screen
               name="ProductDetail"
               component={ProductDetailScreen}
@@ -45,6 +50,10 @@ const AppNavigator = () => {
             <Stack.Screen
               name="ForgotPassword"
               component={ForgotPasswordScreen}
+            />
+            <Stack.Screen
+              name="UpdatePassword"
+              component={UpdatePasswordScreen}
             />
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />

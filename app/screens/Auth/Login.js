@@ -3,15 +3,15 @@ import { View, Text, StyleSheet } from "react-native";
 import { Button, TextInput, Snackbar } from "react-native-paper";
 import { useForm, Controller } from "react-hook-form";
 
-import { useAppContext } from "../../../components/context/AppContext";
-import { AuthService } from "../../../services";
-import LaptechLogo from "../../../components/common/LaptechLogo";
+import LaptechLogo from "../../components/common/LaptechLogo";
+import { useAppContext } from "../../components/context/AppContext";
+import { AuthService } from "../../services";
 
 const LoginScreen = ({ navigation, route }) => {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
   const { handleLogin } = useAppContext();
   const [showPassword, setShowPassword] = useState(false);
@@ -106,8 +106,9 @@ const LoginScreen = ({ navigation, route }) => {
           textColor="#fff"
           style={{ borderRadius: 6 }}
           onPress={handleSubmit(onSubmit)}
+          disabled={isSubmitting}
         >
-          ĐĂNG NHẬP
+          {isSubmitting ? "ĐANG XÁC THỰC" : "ĐĂNG NHẬP"}
         </Button>
 
         <View style={styles.moreOptions}>

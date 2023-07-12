@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
-import { ProductService } from "../../../../services";
-import { Carousel } from "../../../../components/common";
+
+import BannerItem from "./BannerItem";
+import { Carousel } from "../../../../../components/common";
+
+import { ProductService } from "../../../../../services";
 
 const BannerSlide = () => {
   const [bannerList, setBannerList] = useState([]);
@@ -13,7 +16,12 @@ const BannerSlide = () => {
   if (bannerList.length === 0) {
     return <View></View>;
   }
-  return <Carousel data={bannerList} />;
+  return (
+    <Carousel
+      data={bannerList}
+      _renderItem={({ item }) => <BannerItem item={item} />}
+    />
+  );
 };
 
 export default BannerSlide;

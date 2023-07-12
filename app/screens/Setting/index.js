@@ -1,11 +1,12 @@
 import React from "react";
 import { View, Text } from "react-native";
+import { ViewContainer } from "../../components/common";
 
 const SettingScreen = ({ navigation }) => {
   return (
-    <View>
+    <ViewContainer>
       <Text>Setting</Text>
-    </View>
+    </ViewContainer>
   );
 };
 

@@ -6,7 +6,7 @@ const SearchBar = ({ handleSearch }) => {
   const [searchText, setSearchText] = useState("");
 
   return (
-    <View>
+    <View style={{ marginBottom: 10 }}>
       <TextInput
         placeholder="Tìm kiếm sản phẩm ..."
         mode="outlined"

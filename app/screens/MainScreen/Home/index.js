@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Image, ScrollView } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
 import {
   BannerSlide,
   CategorySelectBox,
@@ -15,44 +15,35 @@ import ViewContainer from "../../../components/common/ViewContainer";
 const Home = ({ navigation }) => {
   const handleSearch = (keyword) => {
     if (!!keyword) {
-      navigation.navigate("Product");
+      navigation.navigate("Product", { searchKey: keyword });
     }
   };
 
   const handleBrandPress = (brandId) => {
-    navigation.navigate("Product");
+    navigation.navigate("Product", { brandId });
   };
 
   const handleCategoryPress = (categoryId) => {
-    navigation.navigate("Product");
+    navigation.navigate("Product", { categoryId });
   };
 
   const handleProductPress = (productId) => {
-    navigation.navigate("Product");
+    navigation.navigate("ProductDetail", { productId });
   };
 
   return (
     <ViewContainer>
       <ScrollView>
-        {/* Header */}
         <View style={styles.header}>
           <SearchBar handleSearch={handleSearch} />
           <BannerSlide />
-          {/* <CategorySelectBox /> */}
+          {/* <CategorySelectBox handleSearch={handleCategoryPress} /> */}
           <BrandGroup handlePress={handleBrandPress} />
         </View>
-        <View>
-          <Image
-            source={{
-              uri: "https://fptshop.com.vn/Uploads/Originals/2020/7/7/637297265802454422_C1.png",
-            }}
-            style={{ flex: 1 }}
-          />
-        </View>
-        <ProductOnSales />
-        <ProductRecommend />
-        <ProductWasVisited />
-        <ProductViewInf />
+        <ProductOnSales handlePress={handleProductPress} />
+        {/* <ProductRecommend handlePress={handleProductPress} />
+        <ProductWasVisited handlePress={handleProductPress} /> */}
+        <ProductViewInf handlePress={handleProductPress} />
       </ScrollView>
     </ViewContainer>
   );

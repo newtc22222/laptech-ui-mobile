@@ -1,18 +1,21 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import { ProductService } from "../../../services";
 
-const LazyProductCart = React.lazy(() =>
-  import("../../../components/common/ProductCart")
+const LazyProductCard = React.lazy(() =>
+  import("../../../components/common/ProductCard")
 );
 
-const ProductsScreen = ({ navigation }) => {
+const ProductsScreen = ({ navigation, route }) => {
   const [ininProducts, setInitProducts] = useState([]);
 
   useEffect(() => {
-    const productList = ProductService.getAllProducts();
-    setInitProducts(productList);
+    // ProductService.getAllProducts().then((res) => setInitProducts(res.data));
   }, []);
+
+  const handleProductPress = (productId) => {
+    navigation.navigate("ProductDetail", { params: productId });
+  };
 
   return (
     <View>
@@ -24,10 +27,13 @@ const ProductsScreen = ({ navigation }) => {
         }
       >
         {ininProducts.map((product) => (
-          <LazyProductCart product={product} />
+          <LazyProductCard
+            key={product.id}
+            product={product}
+            handlePress={handleProductPress}
+          />
         ))}
       </Suspense>
-      <Text>ProductsScreen</Text>
     </View>
   );
 };

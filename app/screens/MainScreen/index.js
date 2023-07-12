@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/Feather";
 
 import CartScreen from "./Cart";
 import HomeScreen from "./Home";
+import InvoicesScreen from "./Invoices";
 import ProductsScreen from "./Products";
 import ProfileScreen from "./Profile";
-import SettingScreen from "./Setting";
 
 const Tab = createBottomTabNavigator();
 
@@ -41,12 +41,12 @@ const MainScreen = ({ navigation }) => {
         }}
       />
       <Tab.Screen
-        name="Setting"
-        component={SettingScreen}
+        name="Invoice"
+        component={InvoicesScreen}
         options={{
-          title: "Cài đặt",
-          headerTitle: "Thiết lập ứng dụng",
-          tabBarIcon: (props) => <Icon name="settings" {...props} />,
+          title: "Hóa đơn",
+          headerTitle: "Lịch sử đặt hàng",
+          tabBarIcon: (props) => <Icon name="shopping-bag" {...props} />,
         }}
       />
       <Tab.Screen
@@ -54,7 +54,7 @@ const MainScreen = ({ navigation }) => {
         component={ProfileScreen}
         options={{
           title: "Tài khoản",
-          headerTitle: "Thông tin tài khoản",
+          headerShown: false,
           tabBarIcon: (props) => <Icon name="meh" {...props} />,
         }}
       />

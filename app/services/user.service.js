@@ -2,7 +2,7 @@ import api from "../configs/api";
 
 const UserService = {
   getCurrentUser: async (accessToken) => {
-    const response = await api.get("/users/getCurrentUser", {
+    const response = await api.get("/getCurrentUser", {
       headers: {
         Authorization: "Bearer " + accessToken,
       },
@@ -10,7 +10,7 @@ const UserService = {
     return response.data;
   },
   getCartOfUser: async (accessToken) => {
-    const response = await api.get("/users/myCart", {
+    const response = await api.get("/myCart", {
       headers: {
         Authorization: "Bearer " + accessToken,
       },
@@ -18,26 +18,22 @@ const UserService = {
     return response.data;
   },
   getInvoiceOfUser: async (accessToken) => {
-    const response = await api.get("/users/myInvoices", {
+    const response = await api.get("/myInvoices", {
       headers: {
         Authorization: "Bearer " + accessToken,
       },
     });
     return response.data;
   },
-  updateInformation: async (newInformation) => {
-    const response = await api.post(
-      "/users/changeMyInformation",
-      newInformation,
-      {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-        },
-      }
-    );
+  updateInformation: async (newInformation, accessToken) => {
+    const response = await api.patch("/changeMyInformation", newInformation, {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
     return response.data;
   },
-  updatePassword: async (oldPassword, newPassword) => {
+  updatePassword: async (oldPassword, newPassword, accessToken) => {
     const response = await api.post(
       "/auth/changePassword",
       { oldPassword, newPassword },

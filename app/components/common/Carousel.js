@@ -1,65 +1,47 @@
 import React, { useRef } from "react";
-import {
-  View,
-  Image,
-  ScrollView,
-  Dimensions,
-  Animated,
-  PanResponder,
-} from "react-native";
+import { View, FlatList, Animated, StyleSheet } from "react-native";
 
-const Carousel = ({ data = [] }) => {
-  const scrollRef = useRef(null);
-
-  const screenWidth = Dimensions.get("window").width;
-
-  // Initialize the scroll position animated value
+const Carousel = ({ data = [], _renderItem }) => {
+  // const [currentIndex, setCurrentIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
 
-  // Set up the pan responder for touch gestures
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onPanResponderMove: (_, gestureState) => {
-        // Update the scroll position based on the gesture movement
-        const offsetX = -gestureState.dx / screenWidth;
-        scrollX.setValue(offsetX);
-      },
-      onPanResponderRelease: (_, gestureState) => {
-        // Calculate the index of the active item based on the gesture end position
-        const index = Math.round(-gestureState.dx / screenWidth);
+  // const viewableItemsChanged = useRef(({ viewableItems }) => {
+  //   setCurrentIndex(viewableItems[0].index);
+  // }).current;
+  const viewableItemsChanged = useRef().current;
 
-        // Animate the scroll position to the active item
-        Animated.spring(scrollX, {
-          toValue: -index,
-          useNativeDriver: true,
-        }).start();
-      },
-    })
-  ).current;
+  const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
   return (
-    <View style={{ flex: 1 }}>
-      <ScrollView
-        ref={scrollRef}
+    <View style={styles.container}>
+      <FlatList
+        data={data}
+        renderItem={_renderItem}
         horizontal
+        showsHorizontalScrollIndicator
         pagingEnabled
-        showsHorizontalScrollIndicator={false}
+        bounces={false}
+        key={(item) => item.id}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-          { useNativeDriver: true }
+          {
+            useNativeDriver: false,
+          }
         )}
-        scrollEventThrottle={16}
-        {...panResponder.panHandlers}
-      >
-        {data.map((image, index) => (
-          <View key={index} style={{ width: screenWidth, height: 200 }}>
-            <Image source={{ uri: image.path }} style={{ flex: 1 }} />
-          </View>
-        ))}
-      </ScrollView>
+        // scrollEventThrottle={32}
+        onViewableItemsChanged={viewableItemsChanged}
+        viewabilityConfig={viewConfig}
+      />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 3,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default Carousel;

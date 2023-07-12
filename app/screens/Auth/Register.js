@@ -10,17 +10,12 @@ import { Button, TextInput, Tooltip, Snackbar } from "react-native-paper";
 import { Controller, useForm } from "react-hook-form";
 import RNPickerSelect from "react-native-picker-select";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import LaptechLogo from "../../../components/common/LaptechLogo";
 
-import { AuthService } from "../../../services";
-import { checkPasswordStrength } from "../../../utils/validatePassword";
-import validateEmail from "../../../utils/validateEmail";
-
-const GENDER_OPTIONS = [
-  { label: "NAM", value: "MALE" },
-  { label: "NỮ", value: "FEMALE" },
-  { label: "KHÁC", value: "OTHER" },
-];
+import { GENDER_OPTIONS } from "../../configs/constants";
+import LaptechLogo from "../../components/common/LaptechLogo";
+import { AuthService } from "../../services";
+import { checkPasswordStrength } from "../../utils/validatePassword";
+import validateEmail from "../../utils/validateEmail";
 
 const RegisterScreen = ({ navigation }) => {
   const {
