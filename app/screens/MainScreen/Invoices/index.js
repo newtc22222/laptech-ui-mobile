@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
+  RefreshControl,
   Image,
 } from "react-native";
 import { Provider } from "react-native-paper";
@@ -56,22 +57,30 @@ const InvoicesScreen = ({ navigation }) => {
   const [invoiceList, setInvoiceList] = useState([]);
   const [invoiceDetailItems, setInvoiceDetailItems] = useState([]);
   const [showInvoiceDetailDialog, setShowInvoiceDetailDialog] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    const fetchInvoice = async (accessToken) => {
+  const fetchInvoice = async () => {
+    try {
       const res = await UserService.getInvoiceOfUser(accessToken);
       setInvoiceList(res.data);
-    };
-
-    try {
-      fetchInvoice(accessToken);
     } catch (error) {
       console.error(error);
       AuthService.refreshToken(refreshToken).then((res) =>
         handleUpdateAccessToken(res.accessToken)
       );
     }
+  };
+
+  useEffect(() => {
+    fetchInvoice(accessToken);
   }, [accessToken]);
+
+  const handleRefresh = () => {
+    setTimeout(() => {
+      fetchInvoice();
+      setRefreshing(false);
+    }, 3000);
+  };
 
   const handleShowInvoiceDetail = (invoice) => {
     setInvoiceSelect(invoice);
@@ -144,7 +153,12 @@ const InvoicesScreen = ({ navigation }) => {
           ))}
         </ScrollView>
       </DialogInfo>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+        contentContainerStyle={styles.container}
+      >
         <ScrollView horizontal contentContainerStyle={styles.tabContainer}>
           {tabNames.map((tabName) => (
             <TouchableOpacity

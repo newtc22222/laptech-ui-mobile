@@ -45,11 +45,17 @@ const RegisterScreen = ({ navigation }) => {
   }, []);
 
   const onSubmit = async (data) => {
+    data.dateOfBirth =
+      typeof data.dateOfBirth === "string"
+        ? data.dateOfBirth
+        : data.dateOfBirth.toJSON().slice(0, 10);
     try {
-      await AuthService.register(data);
-      navigation.navigate("Login", {
-        message: "Đăng ký tài khoản thành công!",
-      });
+      const res = await AuthService.register(data);
+      if (Number(res.status) === 201) {
+        navigation.navigate("Login", {
+          message: "Đăng ký tài khoản thành công!",
+        });
+      }
     } catch (error) {
       const errorStr = String(error);
       if (errorStr.includes("422")) {

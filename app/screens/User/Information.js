@@ -26,10 +26,14 @@ const Information = ({ navigation }) => {
   } = useForm({ defaultValues: user });
 
   const onSubmit = async (data) => {
+    data.dateOfBirth =
+      typeof data.dateOfBirth === "string"
+        ? data.dateOfBirth
+        : data.dateOfBirth.toJSON().slice(0, 10);
     const updateData = {
       name: data.name,
       gender: data.gender,
-      dateOfBirth: data.dateOfBirth.toJSON().slice(0, 10),
+      dateOfBirth: data.dateOfBirth,
       email: data.email,
       updateBy: data.name,
     };
