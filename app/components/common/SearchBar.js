@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View } from "react-native";
 import { TextInput } from "react-native-paper";
 
-const SearchBar = ({ handleSearch }) => {
+const SearchBar = ({ handleSearch, disable = false }) => {
   const [searchText, setSearchText] = useState("");
 
   return (
@@ -13,6 +13,7 @@ const SearchBar = ({ handleSearch }) => {
         value={searchText}
         onChangeText={setSearchText}
         onSubmitEditing={() => handleSearch(searchText)}
+        disabled={disable}
         right={
           <TextInput.Icon
             icon="arrow-right"

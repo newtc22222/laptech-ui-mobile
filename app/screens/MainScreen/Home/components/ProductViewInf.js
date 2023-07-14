@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
 import { Button } from "react-native-paper";
 
 import { ProductCard } from "../../../../components/common";
@@ -11,13 +11,16 @@ const ProductViewInf = ({ handlePress }) => {
   const [productList, setProductList] = useState([]);
   const [totalProductCount, setTotalProductCount] = useState(SIZE);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isFetching, setIsFetching] = useState(true);
 
   const fetchProduct = async () => {
+    setIsFetching(true);
     if (currentPage * SIZE <= totalProductCount) {
       const res = await ProductService.getAllProducts(true, currentPage, SIZE);
       if (currentPage === 1) setTotalProductCount(res.count);
       setProductList((prev) => [...prev, ...res.data]);
       setCurrentPage(currentPage + 1);
+      setIsFetching(false);
     }
   };
 
@@ -44,7 +47,9 @@ const ProductViewInf = ({ handlePress }) => {
         style={styles.btnViewMore}
         onPress={handleViewMore}
         disabled={
-          currentPage * SIZE > totalProductCount || productList.length === 0
+          currentPage * SIZE > totalProductCount ||
+          productList.length === 0 ||
+          isFetching
         }
       >
         Xem thêm

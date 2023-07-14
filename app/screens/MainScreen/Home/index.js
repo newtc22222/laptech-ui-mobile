@@ -8,14 +8,13 @@ import {
   ProductWasVisited,
   ProductRecommend,
   ProductViewInf,
-  SearchBar,
 } from "./components";
-import ViewContainer from "../../../components/common/ViewContainer";
+import { SearchBar, ViewContainer } from "../../../components/common";
 
 const Home = ({ navigation }) => {
-  const handleSearch = (keyword) => {
-    if (!!keyword) {
-      navigation.navigate("Product", { searchKey: keyword });
+  const handleSearch = (searchKey) => {
+    if (!!searchKey) {
+      navigation.navigate("Product", { searchKey });
     }
   };
 

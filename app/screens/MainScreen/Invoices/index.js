@@ -90,10 +90,11 @@ const InvoicesScreen = ({ navigation }) => {
         setShowInvoiceDetailDialog(true);
       })
       .catch((error) => {
-        console.error(error);
-        AuthService.refreshToken(refreshToken).then((res) =>
-          handleUpdateAccessToken(res.accessToken)
-        );
+        if (String(error).includes(401)) {
+          AuthService.refreshToken(refreshToken).then((res) =>
+            handleUpdateAccessToken(res.accessToken)
+          );
+        }
       });
   };
 

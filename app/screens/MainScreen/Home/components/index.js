@@ -5,4 +5,3 @@ export { default as ProductOnSales } from "./ProductOnSales";
 export { default as ProductRecommend } from "./ProductRecommend";
 export { default as ProductViewInf } from "./ProductViewInf";
 export { default as ProductWasVisited } from "./ProductWasVisited";
-export { default as SearchBar } from "./SearchBar";

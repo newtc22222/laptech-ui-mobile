@@ -25,8 +25,16 @@ const ProductService = {
     );
     return response.data;
   },
+  filterProductByName: async (name, isCard = true) => {
+    const response = await api.get(
+      "/products/filter?name=" + name + "&isCard=" + isCard
+    );
+    return response.data;
+  },
   filterProduct: async (filterObject) => {
-    const response = await api.get("/products/filter", { data: filterObject });
+    const response = await api.get("/products/filter", {
+      params: filterObject,
+    });
     return response.data;
   },
   getAllBrands: async () => {

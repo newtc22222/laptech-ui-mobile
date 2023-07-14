@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const ip = "192.168.0.74";
+const ip = "192.168.1.9";
 
 const FIX_BASE_URL = `http://${ip}:8088/api/v1`;
 

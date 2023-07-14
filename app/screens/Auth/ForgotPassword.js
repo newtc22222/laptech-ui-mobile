@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { View, Text, StyleSheet } from "react-native";
 import { Button, Snackbar, Tooltip, TextInput } from "react-native-paper";
@@ -12,7 +12,14 @@ const ForgotPasswordScreen = ({ navigation }) => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      phone: "",
+      email: "",
+      username: "",
+      accountCreatedDate: "",
+    },
+  });
 
   const [notifyConfig, setNotifyConfig] = useState({
     show: false,
@@ -30,19 +37,21 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
   const onSubmit = async (data) => {
     try {
-      const res = await AuthService.forgotPasswordScreen(data);
-      console.log(res);
-      navigation.navigate("UpdatePassword", {
-        message: "Một token đã được gửi qua email của bạn!",
-      });
+      const res = await AuthService.forgotPassword(data);
+      if (res.status === 200) {
+        navigation.navigate("UpdatePassword", {
+          message: "Một token đã được gửi qua email của bạn!",
+        });
+      }
     } catch (error) {
+      console.log(error);
       handleShowNotify("Thông tin cung cấp không chính xác!");
     }
   };
 
   return (
     <>
-      <ViewContainer>
+      <ViewContainer _style={styles.container}>
         <LaptechLogo />
         <View style={styles.formControl}>
           <Controller
@@ -72,6 +81,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
           <Controller
             control={control}
             rules={{
+              required: "Vui lòng cung cấp địa chỉ email!",
               validate: (value) => {
                 if (value && !validateEmail(value))
                   return "Địa chỉ email chưa chính xác!";
@@ -84,7 +94,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  label="Email [Không bắt buộc]"
+                  label="Email xác thực"
                 />
               </Tooltip>
             )}
@@ -103,12 +113,18 @@ const ForgotPasswordScreen = ({ navigation }) => {
         >
           GỬI THÔNG TIN
         </Button>
-        <View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            marginTop: 20,
+          }}
+        >
           <Text
             style={styles.textLink}
             onPress={() => navigation.navigate("Login")}
           >
-            Trở lại?
+            Trở lại
           </Text>
         </View>
       </ViewContainer>
@@ -139,6 +155,7 @@ const styles = StyleSheet.create({
   },
   textLink: {
     color: "blue",
+    fontSize: 16,
   },
 });
 
