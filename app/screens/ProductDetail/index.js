@@ -70,7 +70,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
       console.log("error", error);
       if (error.includes("401")) {
         AuthService.refreshToken(refreshToken).then((res) =>
-          handleUpdateAccessToken(res.accessToken)
+          handleUpdateAccessToken(res.data.accessToken)
         );
       }
     } finally {

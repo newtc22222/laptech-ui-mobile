@@ -49,7 +49,7 @@ const Information = ({ navigation }) => {
       console.log(err);
       if (err.includes("401")) {
         AuthService.refreshToken(refreshToken).then((res) =>
-          handleUpdateAccessToken(res.accessToken)
+          handleUpdateAccessToken(res.data.accessToken)
         );
       }
     }

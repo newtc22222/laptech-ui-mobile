@@ -21,9 +21,11 @@ const InvoiceDetail = ({ invoice }) => {
     try {
       fetchItems(accessToken);
     } catch (error) {
-      AuthService.refreshToken(refreshToken).then((res) =>
-        handleUpdateAccessToken(res.accessToken)
-      );
+      if (String(error).includes("401")) {
+        AuthService.refreshToken(refreshToken).then((res) =>
+          handleUpdateAccessToken(res.data.accessToken)
+        );
+      }
     }
   }, []);
 

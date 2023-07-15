@@ -92,7 +92,7 @@ const InvoicesScreen = ({ navigation }) => {
       .catch((error) => {
         if (String(error).includes(401)) {
           AuthService.refreshToken(refreshToken).then((res) =>
-            handleUpdateAccessToken(res.accessToken)
+            handleUpdateAccessToken(res.data.accessToken)
           );
         }
       });

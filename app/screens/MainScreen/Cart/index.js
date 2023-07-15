@@ -32,8 +32,10 @@ const CartScreen = ({ navigation }) => {
       .then((res) => setInitCart(res.data))
       .catch((error) => {
         console.error(error);
-        const res = AuthService.refreshToken(refreshToken);
-        handleUpdateAccessToken(res.accessToken);
+        if (String(error).includes("401")) {
+          const res = AuthService.refreshToken(refreshToken);
+          handleUpdateAccessToken(res.data.accessToken);
+        }
       });
   };
 
