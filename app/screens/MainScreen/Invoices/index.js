@@ -8,13 +8,13 @@ import {
   RefreshControl,
   Image,
 } from "react-native";
-import { Provider } from "react-native-paper";
+import { PaperProvider } from "react-native-paper";
 
 import { useAppContext } from "../../../components/context/AppContext";
-import { AuthService, ProductService, UserService } from "../../../services";
+import { ModalInfo } from "../../../components/common";
 import InvoicesTab from "./tab-content/InvoicesTab";
-import DialogInfo from "../../../components/common/DialogInfo";
 
+import { AuthService, ProductService, UserService } from "../../../services";
 import { getCurrencyString } from "../../../utils/formatCurrency";
 
 const tabNames = [
@@ -56,7 +56,7 @@ const InvoicesScreen = ({ navigation }) => {
   const [invoiceSelect, setInvoiceSelect] = useState(null);
   const [invoiceList, setInvoiceList] = useState([]);
   const [invoiceDetailItems, setInvoiceDetailItems] = useState([]);
-  const [showInvoiceDetailDialog, setShowInvoiceDetailDialog] = useState(false);
+  const [showInvoiceDetailModal, setShowInvoiceDetailModal] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchInvoice = async () => {
@@ -87,7 +87,7 @@ const InvoicesScreen = ({ navigation }) => {
     ProductService.getItemsInvoices(invoice.id, accessToken)
       .then((res) => {
         setInvoiceDetailItems(res.data);
-        setShowInvoiceDetailDialog(true);
+        setShowInvoiceDetailModal(true);
       })
       .catch((error) => {
         if (String(error).includes(401)) {
@@ -99,12 +99,15 @@ const InvoicesScreen = ({ navigation }) => {
   };
 
   return (
-    <Provider>
-      <DialogInfo
-        title={"Sản phẩm trong đơn hàng " + invoiceSelect?.id}
-        show={showInvoiceDetailDialog}
-        onHide={() => setShowInvoiceDetailDialog(false)}
+    <PaperProvider>
+      <ModalInfo
+        _containerStyle={{ borderRadius: 5 }}
+        visible={showInvoiceDetailModal}
+        onHide={() => setShowInvoiceDetailModal(false)}
       >
+        <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+          {"Sản phẩm trong đơn hàng " + invoiceSelect?.id}
+        </Text>
         <ScrollView contentContainerStyle={{ rowGap: 5 }}>
           {invoiceDetailItems.map((item) => (
             <View
@@ -153,7 +156,7 @@ const InvoicesScreen = ({ navigation }) => {
             </View>
           ))}
         </ScrollView>
-      </DialogInfo>
+      </ModalInfo>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
@@ -190,7 +193,7 @@ const InvoicesScreen = ({ navigation }) => {
           />
         ))}
       </ScrollView>
-    </Provider>
+    </PaperProvider>
   );
 };
 

@@ -46,6 +46,7 @@ const ProductViewInf = ({ handlePress }) => {
         mode="outlined"
         style={styles.btnViewMore}
         onPress={handleViewMore}
+        loading={isFetching}
         disabled={
           currentPage * SIZE > totalProductCount ||
           productList.length === 0 ||

@@ -1,6 +1,8 @@
 export { default as Carousel } from "./Carousel";
 export { default as CheckboxGroup } from "./CheckboxGroup";
+export { default as DialogInfo } from "./DialogInfo";
 export { default as LaptechLogo } from "./LaptechLogo";
+export { default as ModalInfo } from "./ModalInfo";
 export { default as ProductCard } from "./ProductCard";
 export { default as ProductSlider } from "./ProductSlider";
 export { default as RadioGroup } from "./RadioGroup";

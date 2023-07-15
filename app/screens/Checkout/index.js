@@ -52,7 +52,10 @@ const CheckoutScreen = ({ navigation, route }) => {
       discountAmount: 0,
       isPaid: false,
       note: data.note,
-      orderStatus: "PENDING",
+      orderStatus:
+        data.paymentType === Object.keys(PAYMENT_TYPE)[0]
+          ? "WAIT_CONFIRMED"
+          : "PENDING",
       paymentAmount: productItems
         .map((i) => i.quantity)
         .reduce((total, curr) => total + curr, 0),
@@ -285,8 +288,9 @@ const CheckoutScreen = ({ navigation, route }) => {
             style={{ borderRadius: 6, width: "70%", paddingVertical: 8 }}
             onPress={handleSubmit(onSubmit)}
             disabled={isSubmitting}
+            loading={isSubmitting}
           >
-            THANH TOÁN
+            {isSubmitting ? "ĐANG XÁC THỰC THÔNG TIN" : "THANH TOÁN"}
           </Button>
           <Button
             mode="contained"
